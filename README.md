@@ -3,7 +3,7 @@
 > A data science approach to credit risk on $7.5B+ of consumer loans across an 11-year window (2007–2018).
 
 **Author:** Talay Kamali · Data Analyst → Data Scientist
-**Stack:** Python · Pandas · Scikit-learn · XGBoost · SHAP · Tableau
+**Stack:** Python · Pandas · Scikit-learn · XGBoost · SHAP · Tableau · Power BI
 **Data:** [LendingClub Accepted Loans, 2007–2018Q4](https://www.kaggle.com/datasets/wordsforthewise/lending-club) — 2.26M loans, 151 features
 **Live dashboard:** [Tableau Public](https://public.tableau.com/app/profile/talay.kamali/vizzes)
 
@@ -42,7 +42,9 @@ loan-default-risk/
 │   ├── 04_modeling.ipynb                # LogReg, RF, XGBoost, SHAP, calibration
 │   └── 05_business_impact.ipynb         # Risk decile analysis, segment mispricing
 ├── tableau/
-│   └── Loan-Default-Risk-Dashboard.twbx # 5-page interactive dashboard
+│   └── Loan-Default-Risk-Dashboard.twbx # 5-page interactive Tableau dashboard
+├── powerbi/
+│   └── Loan-Default-Risk-Dashboard.pbix # 5-page interactive Power BI report
 ├── outputs/
 │   ├── figures/                         # 10+ saved charts (PNG)
 │   ├── loan_predictions.csv             # 59K test-set predictions
@@ -56,17 +58,19 @@ Each notebook is self-contained: re-loads from raw CSV, applies the same 500K ra
 
 ---
 
-## Tableau dashboard
+## Interactive dashboards
 
-A 5-page interactive Tableau Public dashboard makes the findings explorable for non-technical stakeholders:
+The same 5-page analysis is built in **both Tableau and Power BI** to demonstrate fluency across the two leading BI platforms. Each tool tells the same story with its own native interactions.
 
-1. **Portfolio Health** — KPIs (Total Originated, Default Rate, AUC, Risk Separation), vintage trends
-2. **Risk Decile Lab** — interactive what-if simulation with Approval Threshold and LGD parameters
-3. **Segment Mispricing** — Grade × Purpose heatmap exposing where pricing doesn't match risk
-4. **Loan Explorer** — filterable table of risk metrics by Grade, Sub Grade, and Purpose
-5. **Methodology** — model details, limitations, calibration approach
+### Pages (both versions)
 
-[View live →](https://public.tableau.com/app/profile/talay.kamali/vizzes)
+1. **Portfolio Health** — KPIs (Total Originated, Default Rate, AUC, Risk Separation), vintage trends, grade-level default gradient, purpose risk profile (DTI vs default, sized by volume)
+2. **Risk Decile Lab** — interactive what-if simulation with Approval Threshold and LGD parameters; cumulative defaults captured curve
+3. **Segment Mispricing** — Grade × Purpose heatmap exposing where pricing doesn't match risk; pricing gap chart (charged rate vs actual default by grade)
+4. **Loan Explorer** — drillable detail table by Grade → Sub Grade → Purpose
+5. **Methodology** — model details, limitations, calibration plot (predicted vs actual default by decile)
+
+The Tableau version is published live on [Tableau Public](https://public.tableau.com/app/profile/talay.kamali/vizzes). The Power BI version (`.pbix`) is in the `/powerbi` folder of this repo — clone and open in Power BI Desktop to interact with it.
 
 ---
 
@@ -103,7 +107,7 @@ What separates this from a standard Kaggle notebook:
 1. **Stratified train/test split balanced on default class AND vintage year** — both sets statistically representative of every issue year
 2. **Imputation fit on training only, applied to both** — no test-set leakage in the fill values
 3. **Encoding fit on training only** — target encoding for state uses smoothing toward the global mean for small states
-4. **Grade and sub_grade decoded back to letter format (A, A1, B3, G5)** — preserves interpretability for business users in the Tableau layer
+4. **Grade and sub_grade decoded back to letter format (A, A1, B3, G5)** — preserves interpretability for business users in the BI layer
 5. **Leakage column audit** — 23 post-default fields (`recoveries`, `total_rec_*`, `last_pymnt_*`) explicitly identified and dropped
 6. **Class imbalance handled separately from probability calibration** — `scale_pos_weight` for ranking, isotonic regression for probabilities
 7. **Three models compared on AUC, average precision, and Brier score** — not just accuracy, which is misleading on imbalanced data
